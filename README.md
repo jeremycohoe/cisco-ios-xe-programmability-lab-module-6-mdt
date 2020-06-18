@@ -1,11 +1,9 @@
-# **IOS XE Programmability Lab**
+## [IOS XE Programmability Lab](https://github.com/jeremycohoe/cisco-ios-xe-programmability-lab)
 
 
-# **Module: Model Driven Telemetry**
+## Module: Model Driven Telemetry
 
-## Topics Covered
-
-
+## Topics Covered:
 Model-Driven Telemetry
 
 Verify clock synchronization
