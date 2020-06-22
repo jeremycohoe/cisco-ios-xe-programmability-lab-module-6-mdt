@@ -102,10 +102,10 @@ The time is in now sync across all hosts.
 
 Unlike the gRPC **(configured)**, the NETCONF Model Driven Telemetry interface needs only to be enabled within IOS XE - once enabled the Dial-In **(dynamic)** connection can be established from the tooling. 
 
-To enable the NETCONF use the following CLI. Refer to the **NETCONNF** module for more details.
+To enable the NETCONF use the following CLI. Refer to the **NETCONF** module for more details.
 
 ```
-netconf-yanng
+netconf-yang
 ```
 
 NOTE: Enabling NETCONF-YANG is required for Model Driven Telemetry, even if gRPC or gNMI is the telemetry interface being used. 
