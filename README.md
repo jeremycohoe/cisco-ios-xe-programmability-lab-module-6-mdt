@@ -8,13 +8,17 @@ Model-Driven Telemetry
 
 Verify clock synchronization
 
-Configured Subscriptions
+NETCONF Dial-In Dynamic Subscriptions
+
+gNMI Dial-In Dynamic Subscriptions
+
+gRPC Dial-Out Configured Subscriptions
 
 Explore Telegraf
 
 Exploring InfluxdDB
 
-Grafana Dashboard
+Exploring Grafana Dashboards
 
 Conclusion
 
@@ -27,9 +31,9 @@ Network data collection for today s high-density platforms and scale is becoming
 
 There are two main MDT Publication/Subscription models, Dial-in and Dial-out:
 
-**Dial-in** is a dynamic model. An application based on this model has to open a session to the network device and send one or more subscriptions reusing the same session. The network device will send the publications to the application for as long as the session stays up.
+**Dial-in** is a dynamic model. An application based on this model has to open a session to the network device and send one or more subscriptions reusing the same session. The network device will send the publications to the application for as long as the session stays up. **NETCONF** and **gNMI** are the Dial-In telemetry interfaces. 
 
-**Dial-out** is a configured model **.** The subscriptions need to be statically configured on the network device using any of the available interfaces (CLI, APIs, etc.) and the device will open a session with the application. If the session goes down, the device will try to open a new session.
+**Dial-out** is a configured model. The subscriptions need to be statically configured on the network device using any of the available interfaces (CLI, APIs, etc.) and the device will open a session with the application. If the session goes down, the device will try to open a new session. **gRPC** is the Dial-Out telemetry interface.
 
 ![](1-pubsub.png)
 
@@ -93,6 +97,29 @@ You may need to click  "Update now" several times before the Windows host is abl
 The time is in now sync across all hosts.
 
 ![](2-ntp-on-windows.png)
+
+## NETCONF Dial-In Model Driven Telemetry
+
+Unlike the gRPC **(configured)**, the NETCONF Model Driven Telemetry interface needs only to be enabled within IOS XE - once enabled the Dial-In **(dynamic)** connection can be established from the tooling. 
+
+To enable the NETCONF use the following CLI. Refer to the **NETCONNF** module for more details.
+
+```
+netconf-yanng
+```
+
+NOTE: Enabling NETCONF-YANG is required for Model Driven Telemetry, even if gRPC or gNMI is the telemetry interface being used. 
+
+## gNMI Dial-In Model Driven Telemetry
+
+To enable the gNMI Dial-In Model Driven Telemetry interface use the following CLI's. Refer to the **gNMI** module for more details.
+
+```
+gnmi-yang
+gnmi-yang server
+```
+
+NOTE: This enables gNMI only in insecure mode. The CLI **gnmi-yang secure-server** enables the gNMI server in secure mode and requires TLS certificates to be loaded into IOS XE first. Refer to the **gNMI Module** for details on this configuration. gNMI insecure mode is used in the following examples.
 
 
 # gRPC Dial-Out Configured Subscriptions
@@ -204,6 +231,7 @@ receiver ip address 10.1.1.3 57500 protocol grpc-tcp
 
 Note: If the state does not show  "Connected" then ensure the Docker container with the Telegraf receiver is running correctly. Follow the next steps to confirm status of each component.
 
+
 ## Telegraf, Influx, Grafana (TIG)
 
 ![](4-mdt-solution.png)
@@ -221,16 +249,25 @@ auto@automation:~$ docker ps
 ```
 auto@automation:~$ docker exec -it tig_mdt /bin/bash
 
-# cd /root/telegraf
+ <You are now within the Docker container>
 
+# cd /root/telegraf
+# ls
+```
+
+There is one file for each telemetry interface: **NETCONF**, **gRPC**, and **gNMI**. Review each file to understand which. YANG data is being collected by which interface.
+
+```
 # cat telegraf-grpc.conf
+# cat telegraf-gnmi.conf
+# cat telegraf-netconf.conf
 ```
 
 ![](6-docker_exec_cat_grpc.png)
 
-Once inside the Docker container navigate to the telegraf directory and review the configuration file and log by tailing the log file with the command **tail -F /tmp/telegraf-grpc.log** 
+Inside the Docker container navigate to the telegraf directory and review the configuration file and log by tailing the log file with the command **tail -F /tmp/telegraf-grpc.log** 
 
-This configuration file shows us the following:
+The **telegraf-grpc.conf** configuration file shows us the following:
 
 **gRPC Dial-Out Telemetry Input:** This defines the telegraf plugin (cisco\_telemetry\_mdt) that is being used to receive the data, as well as the port (57500)
 
