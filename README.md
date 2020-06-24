@@ -100,7 +100,7 @@ The time is in now sync across all hosts.
 
 ## NETCONF Dial-In Model Driven Telemetry
 
-Unlike the gRPC **(configured)**, the NETCONF Model Driven Telemetry interface needs only to be enabled within IOS XE - once enabled the Dial-In **(dynamic)** connection can be established from the tooling. 
+The NETCONF Model Driven Telemetry interface needs only to be enabled within IOS XE - once enabled the Dial-In **(dynamic)** connection can be established from the tooling. 
 
 To enable the NETCONF use the following CLI. Refer to the **NETCONF** module for more details.
 
@@ -108,7 +108,30 @@ To enable the NETCONF use the following CLI. Refer to the **NETCONF** module for
 netconf-yang
 ```
 
-NOTE: Enabling NETCONF-YANG is required for Model Driven Telemetry, even if gRPC or gNMI is the telemetry interface being used. 
+The AAA requirements for NETCONF are for the user to have privilege level 15 upon login which can be acheived using either local or RADIUS based authentication as shown below:
+
+```
+configure terminal
+aaa new-model
+aaa authentication login default local
+aaa authorization exec default local 
+aaa session-id common
+
+username admin privilege 15 password 0 Cisco123
+```
+
+The **netconf-console** and **ncc-establish-subscription.py** tooling can be used to create dynamic Dial-In telemetry subscriptions from the command line. This is useful when initially building telemetry subscriptions to gain a better understanding of the actual data payload that is send from the IOS XE device.
+
+```
+auto@automation:~$ cd ncc
+auto@automation:~/ncc$ python2 ./ncc-establish-subscription.py --host 10.1.1.5 -u admin -p Cisco123 --period 1000 --xpath '/interfaces/interface'
+```
+
+The **ncc-establish-subscription.py** tool is used to collect the /interfaces/interface data every 1000 centiseconds (10 seconds) as shown below. Press **CTRL+C** to stop the script.
+
+![](ncc-establish-sub.gif)
+
+This concludes NETCONF Dial-In telemetry with CLI tooling - it will be explored further with the Telegraf, InfluxDB, and Grafana tooling in another section.
 
 ## gNMI Dial-In Model Driven Telemetry
 
