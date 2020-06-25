@@ -131,6 +131,59 @@ The **ncc-establish-subscription.py** tool is used to collect the /interfaces/in
 
 ![](ncc-establish-sub.gif)
 
+The example payload is listed here:
+
+```
+auto@automation:~/ncc$ python2 ./ncc-establish-subscription.py --host 10.1.1.5 -u admin -p Cisco123 --period 1000 --xpath '/interfaces/interface'
+Subscription Result : notif-bis:ok
+Subscription Id     : 2147483660
+-->>
+(Default Callback)
+Event time      : 2020-06-25 02:40:22.050000+00:00
+Subscription Id : 2147483660
+Type            : 1
+Data            :
+<datastore-contents-xml xmlns="urn:ietf:params:xml:ns:yang:ietf-yang-push">
+  <interfaces xmlns="http://cisco.com/ns/yang/Cisco-IOS-XE-interfaces-oper">
+    <interface>
+      <name>AppGigabitEthernet1/0/1</name>
+      <interface-type>iana-iftype-ethernet-csmacd</interface-type>
+      <admin-status>if-state-up</admin-status>
+      <oper-status>if-oper-state-ready</oper-status>
+      <last-change>2020-06-12T05:08:25.371000+00:00</last-change>
+      <if-index>49</if-index>
+      <phys-address>CC:5A:53:D9:24:29</phys-address>
+      <speed>1024000000</speed>
+      <statistics>
+        <discontinuity-time>2020-06-12T05:04:40+00:00</discontinuity-time>
+        <in-octets>24268</in-octets>
+        <in-unicast-pkts>-324</in-unicast-pkts>
+        <in-broadcast-pkts>324</in-broadcast-pkts>
+        <in-multicast-pkts>324</in-multicast-pkts>
+        <in-discards>0</in-discards>
+        <in-errors>0</in-errors>
+        <in-unknown-protos>0</in-unknown-protos>
+        <out-octets>92342210</out-octets>
+        <out-unicast-pkts>1284357</out-unicast-pkts>
+        <out-broadcast-pkts>40</out-broadcast-pkts>
+        <out-multicast-pkts>0</out-multicast-pkts>
+        <out-discards>0</out-discards>
+        <out-errors>0</out-errors>
+        <rx-pps>0</rx-pps>
+        <rx-kbps>0</rx-kbps>
+        <tx-pps>1</tx-pps>
+        <tx-kbps>0</tx-kbps>
+        <num-flaps>0</num-flaps>
+        <in-crc-errors>0</in-crc-errors>
+        <in-discards-64>0</in-discards-64>
+        <in-errors-64>0</in-errors-64>
+        <in-unknown-protos-64>0</in-unknown-protos-64>
+        <out-octets-64>92342210</out-octets-64>
+      </statistics>
+<SNIP ... lots more below !>
+```
+
+
 This concludes NETCONF Dial-In telemetry with CLI tooling - it will be explored further with the Telegraf, InfluxDB, and Grafana tooling in another section.
 
 ## gNMI Dial-In Model Driven Telemetry
@@ -142,8 +195,91 @@ gnmi-yang
 gnmi-yang server
 ```
 
-NOTE: This enables gNMI only in insecure mode. The CLI **gnmi-yang secure-server** enables the gNMI server in secure mode and requires TLS certificates to be loaded into IOS XE first. Refer to the **gNMI Module** for details on this configuration. gNMI insecure mode is used in the following examples.
+NOTE: This enables gNMI only in insecure mode. The CLI **gnmi-yang secure-server** enables the gNMI server in secure mode and requires TLS certificates to be loaded into IOS XE first. Refer to the **gNMI Module** for details on this configuration. The gNMI insecure server may used in the following examples.
 
+Use the **gnmi_cli** tool to create a subscription with the following flags. Refer to the **gNMI Module** for details on certificate creation using the gen_certs.sh script if needed.
+
+```
+gnmi_cli -address 10.1.1.5:9339 -server_name c9300 -with_user_pass -timeout 5s -ca_crt rootCA.pem -client_crt client.crt -client_key client.key -proto "$(cat sub_vlan1.txt)" -dt p
+```
+
+The **sub_vlan1.txt** defines the parameters for the subscription for the openconfig-interfaces (oc-if) interfaces/interface Vlan1 data:
+
+```
+subscribe: <
+    prefix: <>
+    subscription: <
+      path: <
+            origin: "legacy"
+            elem: <
+                name: "oc-if:interfaces"
+            >
+            elem: <
+                name: "interface"
+                key {
+                    key: "name"
+                    value: "Vlan1"
+            }
+        >
+        >
+        mode: SAMPLE
+        sample_interval: 10000000000
+    >
+    mode: STREAM
+    encoding: JSON_IETF
+>
+```
+
+Details of the **openconfig-interfaces.YANG** data model are availble from the **YANGSuite** GUI in the Explore YANG area:
+
+![](ys-explore-ocif.png)
+
+The complete workflow for gnmi_cli with the subscription will look similar to the following:
+
+![](gnmi_sub_vlan1.gif)
+
+A complete payload example will look similar to the following:
+
+```
+
+auto@automation:~/gnmi_ssl/certs$ gnmi_cli -address 10.1.1.5:9339 -server_name c9300 -with_user_pass -timeout 5s -ca_crt rootCA.pem -client_crt client.crt -client_key client.key -proto "$(cat ~/gnmi_proto/sub_vlan1.txt)" -dt p
+username: admin
+password: update: <
+  timestamp: 1593052438832704000
+  update: <
+    path: <
+      origin: "legacy"
+      elem: <
+        name: "oc-if:interfaces"
+      >
+      elem: <
+        name: "interface"
+        key: <
+          key: "name"
+          value: "Vlan1"
+        >
+      >
+    >
+    val: <
+      json_ietf_val: "{\"name\":\"Vlan1\",\"config\":{\"name\":\"Vlan1\",\"type\":\"l3ipvlan\",\"enabled\":true},\"state\":{\"name\":\"Vlan1\",\"type\":\"l3ipvlan\",\"enabled\":true,\"ifindex\":53,\"admin-status\":\"UP\",\"oper-status\":\"UP\",\"last-change\":\"1590783663156000000\",\"counters\":{\"in-octets\":\"3550\",\"in-unicast-pkts\":\"38\",\"in-broadcast-pkts\":\"0\",\"in-multicast-pkts\":\"0\",\"in-discards\":\"0\",\"in-errors\":\"0\",\"in-unknown-protos\":\"0\",\"in-fcs-errors\":\"0\",\"out-octets\":\"10439\",\"out-unicast-pkts\":\"78\",\"out-broadcast-pkts\":\"0\",\"out-multicast-pkts\":\"0\",\"out-discards\":\"0\",\"out-errors\":\"0\",\"last-clear\":\"1590783517000000000\"},\"openconfig-platform-port:hardware-port\":\"Vlan1\"}}"
+    >
+  >
+>
+```
+
+The relevant key-value pair with the payload showing the interface details is:
+
+```
+val: <
+      json_ietf_val: "{"name":"Vlan1","config":{"name":"Vlan1","type":"l3ipvlan","enabled":true},
+      "state":{"name":"Vlan1","type":"l3ipvlan","enabled":true,"ifindex":53,"admin-status":"UP",
+      "oper-status":"UP","last-change":"1590783663156000000","counters":{"in-octets":"3550","in-unicast-pkts":"38",
+      "in-broadcast-pkts":"0","in-multicast-pkts":"0","in-discards":"0","in-errors":"0","in-unknown-protos":"0",
+      "in-fcs-errors":"0","out-octets":"10439","out-unicast-pkts":"78","out-broadcast-pkts":"0","out-multicast-pkts":"0",
+      "out-discards":"0","out-errors":"0","last-clear":"1590783517000000000"},"openconfig-platform-port:hardware-port":"Vlan1"}}"
+```
+
+This concludes the **gnmi_cli** tooling example. The **Telegraf** tooling can also be used to collect the telemtry data and save it into the InfluxDB time-series database, where Grafana will be used to visualize the metrics data. This will be explored in the next section.
 
 # gRPC Dial-Out Configured Subscriptions
 
