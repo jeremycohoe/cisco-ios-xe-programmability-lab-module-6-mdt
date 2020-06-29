@@ -35,7 +35,7 @@ There are two main MDT Publication/Subscription models, Dial-in and Dial-out:
 
 **Dial-out** is a configured model. The subscriptions need to be statically configured on the network device using any of the available interfaces (CLI, APIs, etc.) and the device will open a session with the application. If the session goes down, the device will try to open a new session. **gRPC** is the Dial-Out telemetry interface.
 
-![](1-pubsub.png)
+![](imgs/1-pubsub.png)
 
 In this lab we cover the **gRPC Dial-out** telemetry that was released in IOS XE 16.10 along with the open source software stack for collection and visualization:
 
@@ -96,7 +96,7 @@ You may need to click  "Update now" several times before the Windows host is abl
 
 The time is in now sync across all hosts.
 
-![](2-ntp-on-windows.png)
+![](imgs/2-ntp-on-windows.png)
 
 ## NETCONF Dial-In Model Driven Telemetry
 
@@ -129,7 +129,7 @@ auto@automation:~/ncc$ python2 ./ncc-establish-subscription.py --host 10.1.1.5 -
 
 The **ncc-establish-subscription.py** tool is used to collect the /interfaces/interface data every 1000 centiseconds (10 seconds) as shown below. Press **CTRL+C** to stop the script.
 
-![](ncc-establish-sub.gif)
+![](imgs/ncc-establish-sub.gif)
 
 The example payload is listed here:
 
@@ -232,11 +232,11 @@ subscribe: <
 
 Details of the **openconfig-interfaces.YANG** data model are availble from the **YANGSuite** GUI in the Explore YANG area:
 
-![](ys-explore-ocif.png)
+![](imgs/ys-explore-ocif.png)
 
 The complete workflow for gnmi_cli with the subscription will look similar to the following:
 
-![](gnmi_sub_vlan1.gif)
+![](imgs/gnmi_sub_vlan1.gif)
 
 A complete payload example will look similar to the following:
 
@@ -291,7 +291,7 @@ Step 2. Check the subscription configured on the device using the following IOS 
 
 **C9300# show run | sec telemetry**
 
-![](3-showrunsectel.png)
+![](imgs/3-showrunsectel.png)
 
 Lets analyze the main parts of the subscription configuration:
 
@@ -393,7 +393,7 @@ Note: If the state does not show  "Connected" then ensure the Docker container w
 
 ## Telegraf, Influx, Grafana (TIG)
 
-![](4-mdt-solution.png)
+![](imgs/4-mdt-solution.png)
 
 Telegraf is the tool that receives and decodes the telemetry data that is sent from the IOS XE devices. It processes the data and sends it into the InfluxDB datastore, where Grafana can access it in order to create visualizations.
 
@@ -403,7 +403,7 @@ Telegraf runs inside the  "tig_mdt" Docker container. To connect to this contain
 auto@automation:~$ docker ps
 ```
 
-![](5-docker_ps.png)
+![](imgs/5-docker_ps.png)
 
 ```
 auto@automation:~$ docker exec -it tig_mdt /bin/bash
@@ -422,7 +422,7 @@ There is one file for each telemetry interface: **NETCONF**, **gRPC**, and **gNM
 # cat telegraf-netconf.conf
 ```
 
-![](6-docker_exec_cat_grpc.png)
+![](imgs/6-docker_exec_cat_grpc.png)
 
 Inside the Docker container navigate to the telegraf directory and review the configuration file and log by tailing the log file with the command **tail -F /tmp/telegraf-grpc.log** 
 
@@ -440,7 +440,7 @@ Examining the output of the telegraf.log file shows the data coming in from the 
 
 **# tail -F /tmp/telegraf.log**
 
-![](7-cat_telegraf_grpc.png)
+![](imgs/7-cat_telegraf_grpc.png)
 
 ## The Influx Database (influxdb)
 
@@ -512,7 +512,7 @@ The output above shows:
 - one measurement defined as the YANG model used for the gRPC Dial-out subscription (Cisco-IOS-XE-process-cpu-oper:cpu-usage/cpu-utilization)
 - number of publications received so far (33251).
 
-![](8-influx.png)
+![](imgs/8-influx.png)
 
 # Grafana Dashboard
 
@@ -528,18 +528,18 @@ Step 1. Open Firefox or Chrome and access the interface Grafana at [http://10.1.
 
 You should see the following dashboard after logging in with admin:Cisco123
 
-![](9-grafana-grpc.png)
+![](imgs/9-grafana-grpc.png)
 
 To better understand the Grafana dashboard, lets edit the dashlet to see which data is being displayed:
 
 Step 2. Access the Grafan UI on HTT port 3000
 Step 3. Click the **"CPU Utilization"** drop-down and then select **"Edit "**
 
-![](9b-grafana-edit.png)
+![](imgs/9b-grafana-edit.png)
 
 Step 4. Review the information this is pre-configured for this particular chart, specifically the FROM and SELECT sections
 
-![](9c-grafana-details.png)
+![](imgs/9c-grafana-details.png)
 
 # Conclusion
 
