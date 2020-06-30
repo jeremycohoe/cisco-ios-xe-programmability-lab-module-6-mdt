@@ -203,7 +203,7 @@ Use the **gnmi_cli** tool to create a subscription with the following flags. Ref
 gnmi_cli -address 10.1.1.5:9339 -server_name c9300 -with_user_pass -timeout 5s -ca_crt rootCA.pem -client_crt client.crt -client_key client.key -proto "$(cat ~/gnmi_proto/sub_vlan1.txt)" -dt p
 ```
 
-The **sub_vlan1.txt** defines the parameters for the subscription for the openconfig-interfaces (oc-if) interfaces/interface Vlan1 data:
+The **sub_vlan1.txt** defines the parameters for the subscription for the openconfig-interfaces (oc-if) interfaces/interface Vlan1 data. Copy and paste the contents into the **~/gnmi_proto/sub_vlan1.txt** file:
 
 ```
 subscribe: <
