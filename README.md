@@ -4,23 +4,23 @@
 ## Module: Model Driven Telemetry
 
 ## Topics Covered:
-[Model-Driven Telemetry](#Model-Driven-Telemetry)
+[Model-Driven Telemetry](#model-driven-telemetry)
 
-Verify clock synchronization
+[Verify clock synchronization](#verify-clock-synchronization)
 
-NETCONF Dial-In Dynamic Subscriptions
+[NETCONF Dial-In Model Driven Telemetry](#netconf-dial-in-model-driven-telemetry)
 
-gNMI Dial-In Dynamic Subscriptions
+[gNMI Dial-In Model Driven Telemetry](#gnmi-dial-in-model-driven-telemetry)
 
-gRPC Dial-Out Configured Subscriptions
+[gRPC Dial-Out Configured Subscriptions](#grpc-dial-out-configured-subscriptions)
 
-Explore Telegraf
+[Explore Telegraf](#telegraf-influx-grafana-tig)
 
-Exploring InfluxdDB
+[Exploring InfluxdDB](#the-influx-database-influxdb)
 
-Exploring Grafana Dashboards
+[Exploring Grafana Dashboards](#grafana-dashboard)
 
-Conclusion
+[Conclusion](#conclusion)
 
 
 # Model-Driven Telemetry
@@ -45,7 +45,8 @@ In this lab we cover the **gRPC Dial-out** telemetry that was released in IOS XE
 
 Every LAB POD includes a full installation of all the above-mentioned software.
 
-## Verify clock synchronization (optional - only required if troubleshooting)
+## Verify clock synchronization
+(optional - only required if troubleshooting)
 
 When collecting data from any source, a key requirement is a precise and reliable time reference. If the data source and the collector clocks are not aligned, the data becomes inaccurate and can lead to misleading interpretations of a system state.
 
