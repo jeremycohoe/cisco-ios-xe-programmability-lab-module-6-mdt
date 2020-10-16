@@ -4,7 +4,7 @@
 ## Module: Model Driven Telemetry
 
 ## Topics Covered:
-Model-Driven Telemetry
+[Model-Driven Telemetry](#Model-Driven-Telemetry)
 
 Verify clock synchronization
 
