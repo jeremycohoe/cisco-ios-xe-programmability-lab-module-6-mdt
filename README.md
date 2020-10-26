@@ -60,7 +60,7 @@ Follow the similar proceedure as above to use the gnoi_cert tooling to install t
 **/home/auto/gnoi_cert -target_addr c9300:9339 -op provision  -target_name c9300 -alsologtostderr -organization "jcohoe org" -ip_address 10.1.1.5 -time_out=10s -min_key_size=2048 -cert_id grpc-dial-out-tls -state BC -country CA -ca ./myca.cert  -key ./myca.key**
 
 ```
-cd gnmi_ssl/certs
+cd ~/gnmi_ssl/certs-grps-tls/
 /home/auto/gnoi_cert -target_addr c9300:9339 -op provision  -target_name c9300 -alsologtostderr -organization "jcohoe org" -ip_address 10.1.1.5 -time_out=10s -min_key_size=2048 -cert_id grpc-dial-out-tls -state BC -country CA -ca ./myca.cert  -key ./myca.key
 ```
 
