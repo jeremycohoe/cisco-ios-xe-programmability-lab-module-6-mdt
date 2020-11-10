@@ -122,18 +122,18 @@ username admin privilege 15 password 0 Cisco123
 
 The **netconf-console** and **ncc-establish-subscription.py** tooling can be used to create dynamic Dial-In telemetry subscriptions from the command line. This is useful when initially building telemetry subscriptions to gain a better understanding of the actual data payload that is send from the IOS XE device.
 
-```
-
 Enter the python3 virtual envrionment with the 3 linux commands:
 
+```
 cd ; cd ncc
 
 virtualenv v
 
 source v/bin/activate
 
-auto@automation:~$ cd ncc
-auto@automation:~/ncc$ python2 ./ncc-establish-subscription.py --host 10.1.1.5 -u admin -p Cisco123 --period 1000 --xpath '/interfaces/interface'
+cd ncc
+
+./ncc-establish-subscription.py --host 10.1.1.5 -u admin -p Cisco123 --period 1000 --xpath '/interfaces/interface'
 ```
 
 The **ncc-establish-subscription.py** tool is used to collect the /interfaces/interface data every 1000 centiseconds (10 seconds) as shown below. Press **CTRL+C** to stop the script.
