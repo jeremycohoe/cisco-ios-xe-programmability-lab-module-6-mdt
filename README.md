@@ -150,6 +150,15 @@ Explore the
 
 Additional gRPC and Model Driven Telemetry configuration examples can be found on the Github page at [https://github.com/jeremycohoe/cisco-ios-xe-mdt](https://github.com/jeremycohoe/cisco-ios-xe-mdt)
 
+## Add Device Health Dashboard + grpc-tls configurations
+
+Note; Add content from https://grafana.com/grafana/dashboards/13462 and adjust for TLS/IP's/etc
+
+
+
+
+
+
 # Conclusion
 
 This completes the gRPC-TLS section of the lab module. Refer to the previous lab guide, linked below, that covers gRPC telemetry in more detail, as well as Telegraf, InfluxDB, and Grafana - including the tig_mdt Docker container. This lab modules focus is on the gRPC-TLS telemetry connection, while the previous lab guide covers each of the Model Driven Telemetry (MDT) interfaces (NETCONF, gRPC, gNMI) in greater detail.
