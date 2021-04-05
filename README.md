@@ -150,13 +150,15 @@ Explore the Docker container by running the command: **docker exec -it tig_mdt /
 
 Additional gRPC and Model Driven Telemetry configuration examples can be found on the Github page at [https://github.com/jeremycohoe/cisco-ios-xe-mdt](https://github.com/jeremycohoe/cisco-ios-xe-mdt)
 
-## Add Device Health Dashboard + grpc-tls configurations
+## Add Device Health Dashboard ( optional / time permitting)
 
-Note; Add content from https://grafana.com/grafana/dashboards/13462 and adjust for TLS/IP's/etc
+Review the content from https://grafana.com/grafana/dashboards/13462 
 
+The Dashboard JSON can be imported into Grafana and,
 
+The CLI configuration for the 16 XPATHS can be copy/paste into the C9300
 
-
+This provides a very basic device health dashboard view as well as a simple way to view and validate the telemetry data that has been enabled for some of the most common features
 
 
 # Conclusion
