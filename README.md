@@ -126,6 +126,138 @@ Telemetry subscription receivers detail:
 ```
 
 Proceed to the Grafana GUI , where the telemetry data is visualized
+## Telegraf, Influx, Grafana (TIG)
+
+![](imgs/4-mdt-solution.png)
+
+Telegraf is the tool that receives and decodes the telemetry data that is sent from the IOS XE devices. It processes the data and sends it into the InfluxDB datastore, where Grafana can access it in order to create visualizations.
+
+Telegraf runs inside the  "tig_mdt" Docker container. To connect to this container from the Ubuntu host follow the steps below:
+
+```
+auto@automation:~$ docker ps
+```
+
+![](imgs/5-docker_ps.png)
+
+```
+auto@automation:~$ docker exec -it tig_mdt /bin/bash
+
+ <You are now within the Docker container>
+
+# cd /root/telegraf
+# ls
+```
+
+There is one file for each telemetry interface: **NETCONF**, **gRPC**, and **gNMI**. Review each file to understand which. YANG data is being collected by which interface.
+
+```
+# cat telegraf-grpc.conf
+# cat telegraf-gnmi.conf
+# cat telegraf-netconf.conf
+```
+
+![](imgs/6-docker_exec_cat_grpc.png)
+
+Inside the Docker container navigate to the telegraf directory and review the configuration file and log by tailing the log file with the command **tail -F /tmp/telegraf-grpc.log** 
+
+The **telegraf-grpc.conf** configuration file shows us the following:
+
+**gRPC Dial-Out Telemetry Input:** This defines the telegraf plugin (cisco\_telemetry\_mdt) that is being used to receive the data, as well as the port (57500)
+
+**Output Plugin:** This defines where the received data is sent to (outputs.influxdb) the database to use (telegraf) and the URL for InfluxDB ([http://127.0.0.1:8086](http://127.0.0.1:8086/))
+
+**Outputs.file** : sends a copy of the data to the text file at /root/telegraf/telegraf.log
+
+These configuration options are defined as per the README file in each of the respective input or output plugins. For more details of the cisco_telemetry_mdt plugin that is in use here, see the page at ["https://github.com/influxdata/telegraf/tree/master/plugins/inputs/cisco_telemetry_mdt"]("https://github.com/influxdata/telegraf/tree/master/plugins/inputs/cisco_telemetry_mdt")
+
+Examining the output of the telegraf.log file shows the data coming in from the IOS XE device that matches the subscription we created and do ctrl+c to stop the output
+
+**# tail -F /tmp/telegraf.log**
+
+![](imgs/7-cat_telegraf_grpc.png)
+
+## The Influx Database (influxdb)
+
+
+InfluxDB is already installed and started within the same Docker container. Lets verify it s working correctly by connecting into the Docker contain where it is running.
+
+Step 1. Verify InfluxDB is running with the command **ps xa | grep influx**
+
+```
+15 pts/0 Sl+ 1:45 /usr/bin/influxd -pidfile /var/run/influxdb/influxd.pid -config /etc/influxdb/influxdb.conf
+```
+
+Step 2. Verify the data stored on the Influx database using the command shown below:
+
+```
+root@43f8666d9ce0:~# influx
+Connected to http://localhost:8086 version 1.7.7
+InfluxDB shell version: 1.7.7
+> show databases
+name: databases
+name
+----
+_internal
+mdt_gnmi
+mdt_grpc
+cisco_mdt
+mdt_netconf
+>
+> drop database cisco_mdt
+> quit
+root@43f8666d9ce0:~#
+root@43f8666d9ce0:~#
+root@43f8666d9ce0:~#
+root@43f8666d9ce0:~#
+root@43f8666d9ce0:~#
+root@43f8666d9ce0:~#
+root@43f8666d9ce0:~# influx
+Connected to http://localhost:8086 version 1.7.7
+InfluxDB shell version: 1.7.7
+>
+> show databases
+name: databases
+name
+----
+_internal
+mdt_gnmi
+mdt_grpc
+mdt_netconf
+>
+> use mdt_grpc
+Using database mdt_grpc
+> show measurements
+name: measurements
+name
+----
+Cisco-IOS-XE-process-cpu-oper:cpu-usage/cpu-utilization
+>
+> SELECT COUNT("five_seconds") FROM "Cisco-IOS-XE-process-cpu-oper:cpu-usage/cpu-utilization"
+name: Cisco-IOS-XE-process-cpu-oper:cpu-usage/cpu-utilization
+time count
+---- -----
+0    1134
+>
+```
+
+The output above shows:
+
+- a **telegraf** dababase as defined in the Telegraf config file which holds that telemry data
+- one measurement defined as the YANG model used for the gRPC Dial-out subscription (Cisco-IOS-XE-process-cpu-oper:cpu-usage/cpu-utilization)
+- number of publications received so far (33251).
+
+![](imgs/8-influx.png)
+
+# Grafana Dashboard
+
+Grafana is an open-source platform to build monitoring and analytics dashboards that also runs within the Docker container. Navigating to the web based user interface allows us to see the dashboard with the Model Driven Telemetry data
+
+Verify Grafana is running: with the following command: **ps xa | grep grafana**
+
+```
+44 ? Sl 0:32 /usr/sbin/grafana-server --pidfile=/var/run/grafana-server.pid --config=/etc/grafana/grafana.ini --packaging=deb cfg:default.paths.provisioning=/etc/grafana/provisioning cfg:default.paths.data=/var/lib/grafana cfg:default.paths.logs=/var/log/grafan cfg:default.paths.plugins=/var/lib/grafana/plugins**
+```
 
 ## Visualize gRPC-TLS with Grafana
 
