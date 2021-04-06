@@ -41,18 +41,6 @@ Before looking at the gRPC-TLS feature configuration, the required TLS certifica
 
 ## Load the certificates from the Ubuntu into the C9300 with the gnoi_cert tooling
 
-From the Ubuntu linux shell enter the **gnmi-ssl** directory and then go into the **certs** folder - these are the certs to load into the gNMI API via gNOI cert.proto's bootstrapping feature. If DayN/gNOI/cert.proto module was already completed then this step has already been completed.
-
-**cd ~/gnmi_ssl/certs**
-
-**/home/auto/gnoi_cert -target_addr c9300:9339 -op provision  -target_name c9300 -alsologtostderr -organization "jcohoe org" -ip_address 10.1.1.5 -time_out=10s -min_key_size=2048 -cert_id gnxi-cert -state BC -country CA -ca ./rootCA.pem  -key ./rootCA.key**
-
-```
-/home/auto/gnoi_cert -target_addr c9300:9339 -op provision  -target_name c9300 -alsologtostderr -organization "jcohoe org" -ip_address 10.1.1.5 -time_out=10s -min_key_size=2048 -cert_id gnxi-cert -state BC -country CA -ca ./rootCA.pem  -key ./rootCA.key
-```
-
-### Load the grpc-dial-out-tls TLS certificate with gNOI
-
 Follow the similar proceedure as above to use the gnoi_cert tooling to install the **grpc-dial-out-tls** certificate into the IOS XE truststore.
 
 **cd ~/gnmi_ssl/certs-grpc-tls**
