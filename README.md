@@ -189,28 +189,7 @@ name
 _internal
 mdt_gnmi
 mdt_grpc
-cisco_mdt
-mdt_netconf
->
-> drop database cisco_mdt
-> quit
-root@43f8666d9ce0:~#
-root@43f8666d9ce0:~#
-root@43f8666d9ce0:~#
-root@43f8666d9ce0:~#
-root@43f8666d9ce0:~#
-root@43f8666d9ce0:~#
-root@43f8666d9ce0:~# influx
-Connected to http://localhost:8086 version 1.7.7
-InfluxDB shell version: 1.7.7
->
-> show databases
-name: databases
-name
-----
-_internal
-mdt_gnmi
-mdt_grpc
+mdt_grpc_tls
 mdt_netconf
 >
 > use mdt_grpc
