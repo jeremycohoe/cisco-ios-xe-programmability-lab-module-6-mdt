@@ -37,7 +37,7 @@ The focus of this lab is on gRPC with TLS security certificates:
 
 The gRPC MDT interface was introduced in IOS XE 16.10 and in 17.2 support for TLS security encapsulation was added. This means that the gRPC telemetry data can be sent in un-encrypted in plain text, or encrypted using TLS certificates as will be explored further below.
 
-Before looking at the gRPC-TLS feature configuration, the required TLS certificates need to be installed into IOS XE. See the previous verious of the lab guide for those details, it's a manual process that is error prone. This time the certificates can be loaded using the **gNOI cert.proto certificate management API** as detailed in the DayN/gNOI/cert.proto module. Refer to that module for details of the gNOI cert.proto.
+Before looking at the gRPC-TLS feature configuration, the required TLS certificates need to be installed into IOS XE. See the previous version of the lab guide for those details, it's a manual process that is error prone. This time the certificates can be loaded using the **gNOI cert.proto certificate management API** as detailed in the DayN/gNOI/cert.proto module. Refer to that module for details of the gNOI cert.proto.
 
 ## Load the certificates from the Ubuntu into the C9300 with the gnoi_cert tooling
 
