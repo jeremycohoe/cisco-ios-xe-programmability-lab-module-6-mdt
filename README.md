@@ -74,7 +74,7 @@ The main difference when creating a gRPC-TLS configuration is to specify the **g
 
 receiver ip address 10.1.1.3 57500 **protocol grpc-tls profile grpc-dial-out-tls**
 
-An completed exammple gRPC-TLS configuration is shown below
+A complete and example gRPC-TLS configuration is shown below:
 
 ```
 conf t
