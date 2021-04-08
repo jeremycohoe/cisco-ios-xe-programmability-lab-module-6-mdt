@@ -161,7 +161,7 @@ These configuration options are defined as per the README file in each respectiv
 
 Examining the output of the telegraf.log file shows the data coming in from the IOS XE device that matches the subscription we created and do ctrl+c to stop the output.
 
-**# tail -F /tmp/telegraf.log**
+**# tail -F /tmp/telegraf-grpc.log**
 
 ![](imgs/7-cat_telegraf_grpc.png)
 
