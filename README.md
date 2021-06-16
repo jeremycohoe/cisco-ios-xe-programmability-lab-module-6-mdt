@@ -29,10 +29,6 @@ In this lab, we cover the **gRPC Dial-out with DNS** telemetry that was released
 
 Every LAB POD includes a full installation of all the software mentioned above.
 
-The focus of this lab is on gRPC with TLS security certificates:
-
-![](./imgs/intro_grpc_tls.png)
-
 
 # gRPC Dial-Out with FQDN
 
@@ -244,6 +240,6 @@ The **CPU Utilization** streaming telemetry data that was configured earlier is 
 
 # Conclusion
 
-This completes the gRPC Dial-Out with DNS section of the lab module. Refer to the previous lab guide, linked below, that covers gRPC telemetry in more detail, as well as Telegraf, InfluxDB, and Grafana - including the tig_mdt Docker container. This lab modules focus is on the gRPC-TLS telemetry connection, while the previous lab guide covers each of the Model Driven Telemetry (MDT) interfaces (NETCONF, gRPC, gNMI) in greater detail.
+This completes the gRPC Dial-Out with DNS section of the lab module. Refer to the previous lab guide, linked below, that covers gRPC telemetry in more detail, as well as Telegraf, InfluxDB, and Grafana - including the tig_mdt Docker container. This lab modules focus is on the gRPC-Dial Out + FQDN/DNS telemetry connection, while the previous lab guide covers each of the Model Driven Telemetry (MDT) interfaces (NETCONF, gRPC, gNMI) in greater detail.
 
 [https://github.com/jeremycohoe/cisco-ios-xe-programmability-lab-module-6-mdt/blob/master/README-172.md](https://github.com/jeremycohoe/cisco-ios-xe-programmability-lab-module-6-mdt/blob/master/README-172.md)
