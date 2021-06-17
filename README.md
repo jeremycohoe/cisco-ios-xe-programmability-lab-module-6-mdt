@@ -165,8 +165,7 @@ Examining the output of the telegraf.log file shows the data coming in from the 
 
 ![](imgs/7-cat_telegraf_grpc.png)
 
-## The Influx Database (influxdb)
-
+## The Influx Database InfluxDB 
 
 InfluxDB is already installed and started within the same Docker container. Let's verify it's working correctly by connecting to the Docker contain where it is running.
 
@@ -231,8 +230,7 @@ Open the Firefox browser and navigate to the Grafana tab or shortcut.
 
 The **CPU Utilization** streaming telemetry data that was configured earlier is now visible in the pre-configured chart as seen below
 
-
-
+This shows this telemetry data that was configured earlier in this lab using Grafana for visualization of the data.
 
 ![](./imgs/grafana-secure.png)
 
