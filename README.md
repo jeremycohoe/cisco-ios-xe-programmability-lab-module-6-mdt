@@ -241,3 +241,7 @@ This shows this telemetry data that was configured earlier in this lab using Gra
 This completes the gRPC Dial-Out with DNS section of the lab module. Refer to the previous lab guide, linked below, that covers gRPC telemetry in more detail, as well as Telegraf, InfluxDB, and Grafana - including the tig_mdt Docker container. This lab modules focus is on the gRPC-Dial Out + FQDN/DNS telemetry connection, while the previous lab guide covers each of the Model Driven Telemetry (MDT) interfaces (NETCONF, gRPC, gNMI) in greater detail.
 
 [https://github.com/jeremycohoe/cisco-ios-xe-programmability-lab-module-6-mdt/blob/master/README-172.md](https://github.com/jeremycohoe/cisco-ios-xe-programmability-lab-module-6-mdt/blob/master/README-172.md)
+
+Please mark this module complete in the following SmartSheet form and be sure to include your name, e-mail ID, and pod #
+
+https://app.smartsheet.com/b/form/134240eac2d84a57acd4efc24fd8f3d0
