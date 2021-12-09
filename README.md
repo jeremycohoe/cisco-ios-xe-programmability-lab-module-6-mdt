@@ -1,5 +1,6 @@
 ## [IOS XE Programmability Lab](https://github.com/jeremycohoe/cisco-ios-xe-programmability-lab)
 
+flag: c52d3d27273a15b8c624e2d7fb7c47b34395766e
 
 ## Module: Model Driven Telemetry
 
